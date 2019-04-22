@@ -177,7 +177,7 @@ app.get('/sabores/:id', function (req, res) {
     res.send(sabores);
 });
 app.post("/logon", function (req, res) {
-    if (req.body.userName == 'stephen' && req.body.password == '1234') {
+    if (req.body.userName == 'admin' && req.body.password == '1234') {
         console.log("entrou sucesso");
         res.status(200).send({
             userName: req.body.userName,
@@ -187,15 +187,6 @@ app.post("/logon", function (req, res) {
     else {
         console.log("entrou 401");
         res.status(401).send({});
-    }
-});
-app.post("/usuario", function (req, res) {
-    (res.status(200));
-    {
-        res.send({
-            "IdUsuario": 1,
-            "Nome": "Usuario 1",
-        });
     }
 });
 app.listen(port, function () {

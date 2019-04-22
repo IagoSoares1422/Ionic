@@ -1,4 +1,9 @@
 import express = require("express");
+import { MySQLFactory } from "./mysql_factory";
+import {MySQL} from './mysql';
+
+
+
 var cors = require("cors");
 var bodyParser = require("body-parser");
 
@@ -190,34 +195,43 @@ app.get('/sabores/:id', function (req, res) {
     res.send(sabores);
 });
 
+//app.post("/logon", function(req, res){
+
+    //if (req.body.userName == 'admin' && req.body.password == '1234'){
+        //console.log("entrou sucesso");
+        //res.status(200).send(
+              //      {
+            //            userName : req.body.userName,
+          //              password : req.body.password
+        //            }
+      //            );
+    //} else {
+      //  console.log("entrou 401");
+    //    res.status(401).send({});
+  //  }
+
+//});
+
 app.post("/logon", function(req, res){
+       
+    let sql = 'select * from users where login.usuario = \'' + req.body.usuario + '\' and login.senha = \'' + req.body.senha + '\'';
 
-    if (req.body.userName == 'stephen' && req.body.password == '1234'){
-        console.log("entrou sucesso");
-        res.status(200).send(
-                    {
-                        userName : req.body.userName,
-                        password : req.body.password
-                    }
-                  );
-    } else {
-        console.log("entrou 401");
-        res.status(401).send({});
-    }
-
-});
-
-app.post("/usuario", function(req, res){
-
-    ( res.status(200)){
-        res.send(
-            {
-                "IdUsuario": 1,
-                "Nome": "Usuario 1",
-                "Password": "Senha 1",
+        new MySQLFactory().getConnection().select(sql).subscribe(
+            (data : any) => {
+                if (!data.length || data.length != 1){
+                 res.status(401).send('Ferrou');
+                  return;
+                }
+                
+                res.send({                    
+                    usuario : req.body.usuario,
+                    senha : req.body.senha
+                });
+            },
+            (error : any) => {
+                res.status(404).send('Ferrou');
             }
-        )
-    }
+        );
 });
 
 app.listen(port, function () {
