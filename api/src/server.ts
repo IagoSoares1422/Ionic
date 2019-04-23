@@ -214,21 +214,23 @@ app.get('/sabores/:id', function (req, res) {
 
 app.post("/logon", function(req, res){
        
-    let sql = 'select * from users where login.usuario = \'' + req.body.usuario + '\' and login.senha = \'' + req.body.senha + '\'';
-
+    let sql = 'select * from login where login.usuario = \'' + req.body.userName + '\' and login.senha = \'' + req.body.password + '\'';
+    console.log(sql);
         new MySQLFactory().getConnection().select(sql).subscribe(
             (data : any) => {
+                console.log(data);
                 if (!data.length || data.length != 1){
-                 res.status(401).send('Ferrou');
+                 res.status(401).send('fodeuse');
                   return;
                 }
                 
                 res.send({                    
-                    usuario : req.body.usuario,
-                    senha : req.body.senha
+                    userName : req.body.userName,
+                    password : req.body.password
                 });
             },
             (error : any) => {
+                console.log(error);
                 res.status(404).send('Ferrou');
             }
         );
